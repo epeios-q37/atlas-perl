@@ -1,3 +1,4 @@
+=pod
 MIT License
 
 Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
@@ -19,3 +20,47 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+=cut
+
+package XDHq::SHRD;
+
+use Config;
+
+use constant {
+    RT_VOID => 0,
+    RT_STRING => 1,
+    RT_STRINGS => 2
+};
+
+use constant {
+    FALSE => undef,
+    TRUE => not (undef)
+};
+
+sub isWin {
+    return $Config{osname} eq "MSWin32";
+}
+
+sub isDev {
+    return defined($ENV{"EPEIOS_SRC"});
+}
+
+sub open {
+    my $os = $Config{osname};
+    my $opener;
+
+    if ( $os eq "MSWin32" ) {
+        $opener = "start";
+    } elsif ( $os eq "darwin" ) {
+        $opener = "open"
+    } elsif ( $os eq "cygwin" ) {
+        $opener = "cygstart";
+    } else {
+        $opener = "xdg-open";
+    }
+
+    system($opener,shift);
+}
+
+return TRUE;
+

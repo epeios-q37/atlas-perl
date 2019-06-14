@@ -1,3 +1,4 @@
+=pod
 MIT License
 
 Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
@@ -19,3 +20,24 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+=cut
+
+package XDHq;
+
+use XDHq::SHRD;
+use XDHq::DEMO;
+use XDHq::DEMO::DOM;
+
+sub readAsset {
+    open FILEHANDLE, shift or die $!;
+
+    return do { local $/; <FILEHANDLE> };
+}
+
+sub launch {
+    my ($callback,$userCallback,$callbacks,$headContent,$dir) = @_;
+
+    XDHq::DEMO::launch($callback,$userCallback,$callbacks,$headContent);
+}
+
+return XDHq::SHRD::TRUE;

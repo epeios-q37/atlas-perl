@@ -1,3 +1,4 @@
+=pod
 MIT License
 
 Copyright (c) 2019 Claude SIMON (https://q37.info/s/rmnmqd49)
@@ -19,3 +20,49 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+=cut
+
+package Atlas;
+
+use XDHq;
+use XDHq::SHRD;
+use XDHq::DOM;
+use strict;
+use threads;
+
+# print("\t>>>>> " . __FILE__ . ":" . __LINE__ . "\n");
+
+sub readAsset {
+    return XDHq::readAsset(@_);
+}
+
+my sub worker {
+    my ($userCallback, $instance, $callbacks) = @_;
+    my $userObject;
+
+    my $dom = XDHq::DOM->new($instance);
+
+    if ( $userCallback ) {
+        $userObject = &$userCallback();
+    }
+
+    while (XDHq::SHRD::TRUE) {
+        my ($action, $id) = $dom->getAction();
+
+        $callbacks->{$action}->($userObject,$dom, $id);
+    }
+}
+
+my sub callback {
+    my ($userCallback, $callbacks, $instance) = @_;
+
+    return threads->create(\&worker, $userCallback, $instance, $callbacks);
+}
+
+sub launch {
+    my ($callbacks,$userCallback,$headContent,$dir) = @_;
+
+    XDHq::launch(\&callback,$userCallback,$callbacks,$headContent,$dir);
+}
+
+return XDHq::SHRD::TRUE;
