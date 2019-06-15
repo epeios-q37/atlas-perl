@@ -22,38 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
-package XDHq;
+use strict; use warnings;
 
-use XDHq::SHRD;
-use XDHq::DEMO;
-use XDHq::DEMO::DOM;
+use lib "atlastk";
 
-use Cwd;
-
-sub _getAssetPath {
-    if (XDHq::SHRD::isDev() ) {
-        return "/cygdrive/h/hg/epeios/tools/xdhq/examples/common/" . shift;
-    } else {
-        return getcwd . '/' . shift;
-    }
-}
-
-sub _getAssetFilename {
-    my ($path, $dir) = @_;
-
-    return _getAssetPath($dir) . '/' . $path; 
-}
+use Atlas;
 
 sub readAsset {
-    open FILEHANDLE, _getAssetFilename(shift, shift) or die $!;
-
-    return do { local $/; <FILEHANDLE> };
+    return Atlas::readAsset( shift, "Hello" );
 }
 
-sub launch {
-    my ($callback,$userCallback,$callbacks,$headContent,$dir) = @_;
+sub acConnect {
+    my ($hello, $dom) = @_;
 
-    XDHq::DEMO::launch($callback,$userCallback,$callbacks,$headContent);
+    $dom->setLayout("",readAsset("Main.html"));
+    $dom->focus("input");
 }
 
-return XDHq::SHRD::TRUE;
+sub acSubmit {
+    my ($hello, $dom) = @_;
+
+    $dom->alert("Hello, " . $dom->getContent("input") . "!");
+    $dom->focus("input");
+}
+
+sub acClear {
+    my ($hello, $dom) = @_;
+
+    if ( $dom->confirm("Are you sure?") ) {
+        $dom->setContent("input", "");
+    }
+
+    $dom->focus("input");
+}
+
+my %callbacks = (
+    "" => \&acConnect,
+    "Submit" => \&acSubmit,
+    "Clear" => \&acClear,
+);
+
+Atlas::launch(\%callbacks, sub {return undef;}, readAsset("Head.html"));
