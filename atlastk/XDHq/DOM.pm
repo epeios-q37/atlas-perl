@@ -132,12 +132,12 @@ sub setTimeout {
     shift->{dom}->call("SetTimeout_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
 }
 
-sub insertChild {
-    shift->{dom}->call("InsertChild_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
-}
-
 sub createElement {
     return shift->{dom}->call("CreateElement_1", XDHq::SHRD::RT_STRING, 2, shift, shift, 0);
+}
+
+sub insertChild {
+    shift->{dom}->call("InsertChild_1", XDHq::SHRD::RT_VOID, 2, shift, shift, 0);
 }
 
 sub _handleClasses {
@@ -148,8 +148,16 @@ sub addClasses {
     shift->_handleClasses("AddClasses_1", shift );
 }
 
+sub removeClasses {
+    shift->_handleClasses("RemoveClasses_1", shift);
+}
+
 sub addClass {
     shift->addClasses({shift() => shift})
+}
+
+sub removeClass {
+    shift->removeClasses({shift() => shift});
 }
 
 sub enableElements {
