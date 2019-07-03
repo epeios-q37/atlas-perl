@@ -22,34 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 =cut
 
+package Shared;
+
 use strict; use warnings;
 
 use lib "atlastk";
 use Atlas;
 
+use threads::shared;
+
+use constant {
+    FALSE => undef,
+    TRUE => not (undef)
+};
+
+@Shared::viewModeElements = ("Pattern", "CreateButton", "DescriptionToggling", "ViewNotes");
+
 sub readAsset {
-    return Atlas::readAsset( shift, "Blank" );
+    return Atlas::readAsset( shift, "Notes" );
 }
 
-sub acConnect {
-    my ($blank, $dom) = @_;
-
-    $dom->setLayout("", readAsset("Main.html"));
-    $dom->addClass("Input", "hidden");
+sub trim {
+    my $s = shift;
+    $s =~ s/^\s+|\s+$//g;
+    return $s
 }
 
-sub acShowInput {
-    my ($blank, $dom) = @_;
-
-    $dom->removeClass("Input", "hidden");
-    $dom->focus("Pattern");
-}
-
-my %callbacks = (
-    "" => \&acConnect,
-    "Submit" => sub {my ($blank, $dom) = @_; $dom->setContent("Pattern", uc $dom->getContent("Pattern"));},
-    "HideInput" => sub {my ($blank, $dom) = @_; $dom->addClass("Input", "hidden");},
-    "ShowInput" => \&acShowInput
-);
-
-Atlas::launch(\%callbacks, sub {return undef;}, readAsset("Head.html"));
+return TRUE;

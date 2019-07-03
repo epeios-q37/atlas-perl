@@ -3,6 +3,22 @@
 - Common to **all** bindings,
 - does **not** concern the native code,
 
+## 2019-07-03
+
+- *Perl*
+  - updating the *API* to fit with the version 0.9 (not documented yet),
+  - switching to 0.9.0,
+  - (adding the *Notes* application),
+- *Python*:
+  - fixing issue that prevented the toolkit from working with *Python* 2,
+  - switching to 0.9.9
+
+## 2019-07-01
+
+- *Python*:
+  - the callbacks can now have none to four (user object, *DOM* object, id, action) parameters,
+  - switching to 0.9.8
+
 ## 2019-06-01
 
 - *Python*:
@@ -20,8 +36,8 @@
 ## 2019-05-09
 
 - *Node.js*:
-	- changing some stuff related to *Repl.it*,
-	- switching to 0.9.2,
+  - changing some stuff related to *Repl.it*,
+  - switching to 0.9.2,
 
 ## 2019-05-07
 
