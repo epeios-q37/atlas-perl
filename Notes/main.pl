@@ -27,7 +27,7 @@ use strict; use warnings;
 use lib "atlastk";
 use Atlas;
 
-use lib "notes";
+use lib "Notes";
 use Shared;
 use Notes;
 
@@ -127,4 +127,4 @@ my %callbacks = (
 	"Cancel" => \&acCancel,
 );
 
-Atlas::launch(\%callbacks, sub {return Notes->new()}, readAsset("Head.html"));
+Atlas::launch(\%callbacks, sub {return Notes->new()}, Shared::readAsset("Head.html"));
