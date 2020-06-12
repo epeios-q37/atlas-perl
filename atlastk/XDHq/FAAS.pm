@@ -24,23 +24,23 @@ SOFTWARE.
 
 use strict; use warnings;
 
-package XDHq::DEMO;
+package XDHq::FAAS;
 
 use XDHq::SHRD;
-use XDHq::DEMO::SHRD;
-use XDHq::DEMO::Instance;
+use XDHq::FAAS::SHRD;
+use XDHq::FAAS::Instance;
 use IO::Socket::INET;
 use threads;
 use threads::shared;
 use strict;
 
-my $demoProtocolLabel = "877c913f-62df-40a1-bf5d-4bb5e66a6dd9";
-my $demoProtocolVersion = "0";
-my $mainProtocolLabel = "6e010737-31d8-4be3-9195-c5b5b2a9d5d9";
+my $FaaSProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894";
+my $FaaSProtocolVersion = "0";
+my $mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666";
 my $mainProtocolVersion = "0";
 
-my $pAddr = "atlastk.org";
-my $pPort = 53800;
+my $pAddr = "faas1.q37.info";
+my $pPort = 53700;
 my $wAddr = "";
 my $wPort = "";
 my $cgi = "xdh";
@@ -79,7 +79,7 @@ sub _init {
         CORE::say("\tDEV mode!");
     } elsif ($atk eq "TEST") {
         $cgi = "xdh_";
-    } else  {
+    } elsif ($atk ne "REPLit") {
         die("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
     }
 
@@ -107,27 +107,33 @@ sub _init {
     # auto-flush on socket
     $| = 1;
 
+    CORE::say("Connection to '${pAddr}:${pPort}'…");
+
+
     # create a connecting socket
-    $XDHq::DEMO::SHRD::socket = new IO::Socket::INET (
+    $XDHq::FAAS::SHRD::socket = new IO::Socket::INET (
         PeerHost => $pAddr,
         PeerPort => $pPort,
         Proto => 'tcp',
     );
 
-    die("Error on connection to '${pAddr}:${pPort}': $! !!!\n") unless $XDHq::DEMO::SHRD::socket;
+    die("Error on connection to '${pAddr}:${pPort}': $! !!!\n") unless $XDHq::FAAS::SHRD::socket;
+
+    CORE::say("Connected to '${pAddr}:${pPort}'.\n");
 }
 
-sub _demoHandshake {
-    XDHq::DEMO::SHRD::writeString($demoProtocolLabel);
-    XDHq::DEMO::SHRD::writeString($demoProtocolVersion);
+sub _handshake {
 
-    my $error = XDHq::DEMO::SHRD::getString();
+    XDHq::FAAS::SHRD::writeString($FaaSProtocolLabel);
+    XDHq::FAAS::SHRD::writeString($FaaSProtocolVersion);
+
+    my $error = XDHq::FAAS::SHRD::getString();
 
     if ( $error ne "") {
         die($error);
     }
 
-    my $notification = XDHq::DEMO::SHRD::getString();
+    my $notification = XDHq::FAAS::SHRD::getString();
 
     if ( $notification ne "") {
         CORE::say($notification);
@@ -135,22 +141,30 @@ sub _demoHandshake {
 }
 
 sub _ignition {
-    XDHq::DEMO::SHRD::writeString($token);
-    XDHq::DEMO::SHRD::writeString($main::headContent);
+    XDHq::FAAS::SHRD::writeString($token);
+    XDHq::FAAS::SHRD::writeString($main::headContent);
+    XDHq::FAAS::SHRD::writeString($wAddr);
+    XDHq::FAAS::SHRD::writeString("PRL");    
 
-    $token = XDHq::DEMO::SHRD::getString();
+    $token = XDHq::FAAS::SHRD::getString();
 
     if ( $token eq "") {
-        die(XDHq::DEMO::SHRD::getString());
+        die(XDHq::FAAS::SHRD::getString());
     }
 
     if (not($wPort eq ":0")) {
-        my $url = "http://${wAddr}${wPort}/${cgi}.php?_token=${token}";
+        my $url = XDHq::FAAS::SHRD::getString();
 
         CORE::say($url);
         CORE::say("^" x length($url));
         CORE::say("Open above URL in a web browser. Enjoy!\n");
-        XDHq::SHRD::open($url);
+
+        if ( XDHq::SHRD::isREPLit() ) {
+            system("node", "-e",
+            'require("http").createServer(function (req, res){res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"https://atlastk.org/repl_it.php?url=' . $url . '\"></iframe></body></html>");process.exit();}).listen(8080)');
+        } else {
+            XDHq::SHRD::open($url);
+        }
     }
 }
 
@@ -158,48 +172,59 @@ sub _serve {
     my ($callback, $userCallback, $callbacks) = @_;
 
     while(XDHq::SHRD::TRUE) {
-        my $id = XDHq::DEMO::SHRD::getByte();
+        my $id = XDHq::FAAS::SHRD::getSInt();
 
-        if ( $id eq 255) {   # Value reporting a new front-end.
-            $id = XDHq::DEMO::SHRD::getByte();    # The id of the new front-end.
+        if ( $id eq -1 ) {   # Should never happen.
+            die("Received unexpected undefined command id!");
+        } elsif ( $id eq -2) {   # Value reporting a new front-end.
+            $id = XDHq::FAAS::SHRD::getSInt();    # The id of the new front-end.
 
-            if( $instances{$id} ) {
+            if ( $instances{$id} ) {
                 die("Instance of id '${id}' exists but should not !")
             }
 
-            my $instance : shared = XDHq::DEMO::Instance::new();
+            my $instance : shared = XDHq::FAAS::Instance::new();
 
-            XDHq::DEMO::Instance::set($instance, $callback->($userCallback, $callbacks, $instance),$id);
+            XDHq::FAAS::Instance::set($instance, $callback->($userCallback, $callbacks, $instance),$id);
 
             $instances{$id}=$instance;
 
             {   # Locking scope.
-                lock($XDHq::DEMO::SHRD::writeLock);
-                XDHq::DEMO::SHRD::writeByte($id);
-                XDHq::DEMO::SHRD::writeString($mainProtocolLabel);
-                XDHq::DEMO::SHRD::writeString($mainProtocolVersion);
+                lock($XDHq::FAAS::SHRD::writeLock);
+                XDHq::FAAS::SHRD::writeSInt($id);
+                XDHq::FAAS::SHRD::writeString($mainProtocolLabel);
+                XDHq::FAAS::SHRD::writeString($mainProtocolVersion);
             }
+        } elsif ( $id eq -3 ) {
+            $id = XDHq::FAAS::SHRD::getSInt();
+
+            if ( not($instances{$id})) {
+                die("Instance of id id '${id}' not available for destruction!")  ;
+            }
+
+           $instances{$id}->{quit} = XDHq::SHRD::TRUE;
+
+            XDHq::FAAS::Instance::signal($instances{$id});
+
+            lock($XDHq::FAAS::SHRD::globalCondition);
+            cond_wait($XDHq::FAAS::SHRD::globalCondition);
+
+            delete $instances{$id};
         } elsif ( not($instances{$id})) {
             die("Unknown instance of id '${id}'!")
-        } elsif (not(XDHq::DEMO::Instance::testAndSetHandshake($instances{$id}))) {
-            my $error = XDHq::DEMO::SHRD::getString();
+        } elsif (not(XDHq::FAAS::Instance::testAndSetHandshake($instances{$id}))) {
+            my $error = XDHq::FAAS::SHRD::getString();
 
             if ($error) {
                 die($error);
             }
 
-            XDHq::DEMO::SHRD::getString();    # Language. Not handled yet.
-
-            {   # Lock scope;
-                lock($XDHq::DEMO::SHRD::writeLock);
-                XDHq::DEMO::SHRD::writeByte($id);
-                XDHq::DEMO::SHRD::writeString("PRL");
-            }
+            XDHq::FAAS::SHRD::getString();    # Language. Not handled yet.
         } else {
-            XDHq::DEMO::Instance::signal($instances{$id});
+            XDHq::FAAS::Instance::signal($instances{$id});
 
-            lock($XDHq::DEMO::SHRD::globalCondition);
-            cond_wait($XDHq::DEMO::SHRD::globalCondition);
+            lock($XDHq::FAAS::SHRD::globalCondition);
+            cond_wait($XDHq::FAAS::SHRD::globalCondition);
         }
     }
 }
@@ -210,9 +235,18 @@ sub launch {
     $main::headContent = $headContent;
 
     _init();
-    _demoHandshake();
+    _handshake();
     _ignition();
     _serve($callback, $userCallback, $callbacks);
+}
+
+sub broadcastAction {
+    {   # Lock scope;
+        lock($XDHq::FAAS::SHRD::writeLock);
+        XDHq::FAAS::SHRD::writeSInt(-3);
+        XDHq::FAAS::SHRD::writeString(shift);
+        XDHq::FAAS::SHRD::writeString(shift);
+    }    
 }
 
 return XDHq::SHRD::TRUE;

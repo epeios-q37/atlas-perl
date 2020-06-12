@@ -25,14 +25,14 @@ SOFTWARE.
 package XDHq;
 
 use XDHq::SHRD;
-use XDHq::DEMO;
-use XDHq::DEMO::DOM;
+use XDHq::FAAS;
+use XDHq::FAAS::DOM;
 
 use Cwd;
 
 sub _getAssetPath {
     if (XDHq::SHRD::isDev() ) {
-        return "/cygdrive/h/hg/epeios/tools/xdhq/examples/common/" . shift;
+        return "/home/csimon/epeios/tools/xdhq/examples/common/" . shift;
     } else {
         return getcwd . '/' . shift;
     }
@@ -53,7 +53,11 @@ sub readAsset {
 sub launch {
     my ($callback,$userCallback,$callbacks,$headContent,$dir) = @_;
 
-    XDHq::DEMO::launch($callback,$userCallback,$callbacks,$headContent);
+    XDHq::FAAS::launch($callback,$userCallback,$callbacks,$headContent);
+}
+
+sub broadcastAction {
+    XDHq::FAAS::broadcastAction(@_);
 }
 
 return XDHq::SHRD::TRUE;

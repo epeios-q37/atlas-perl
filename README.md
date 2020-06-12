@@ -1,33 +1,48 @@
 # *Perl* version of the *Atlas* toolkit
 
-![For Perl](http://q37.info/download/assets/Perl.png "Perl logo")
+![For Perl](https://q37.info/download/assets/Perl.png "Perl logo")
 
-[![Version 0.10.0](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.10.0)](http://q37.info/s/gei0veus)
+[![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-perl)](https://q37.info/s/h3h34zgq)
+[![Version 0.11](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.11)](http://github.com/epeios-q37/atlas-perl/)
+[![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-perl.svg?style=social)](https://github.com/epeios-q37/atlas-perl/stargazers)
+[![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-perl?color=yellow))](https://github.com/epeios-q37/atlas-perl/blob/master/LICENSE)
+[![Homepage](https://img.shields.io/static/v1?label=homepage&message=atlastk.org&color=ff69b4)](https://atlastk.org)
 
-A fast and easy way to add a graphical user interface ([GUI](http://q37.info/s/hw9n3pjs)) to your *Perl* programs.
 
-With the *Atlas* toolkit, both [front and back ends](http://q37.info/s/px7hhztd) are handled by the same code, and the programs will also be reachable from all over the internet.
+*NOTA*: this toolkit is also available for:
+- *Java*: <http://github.com/epeios-q37/atlas-java>,
+- *Node.js*: <http://github.com/epeios-q37/atlas-node>,
+- *Python*: <http://github.com/epeios-q37/atlas-python>,
+- *Ruby*: <http://github.com/epeios-q37/atlas-ruby>.
 
-Only basic knowledge of web technologies are required (no *JavaScript* knowledge required). And, with the *Atlas* toolkit, you can easily add a GUI to a programs originally designed to have a [CLI](https://q37.info/s/cnh9nrw9), so the users of this programs can choose which interface they want to use.
+---
 
-<!--
-If you want to use the *Atlas* toolkit without installing the examples, simply install the [*atlastk* package from *PyPI*](http://q37.info/s/9srmskcm) (`pip install atlastk`). This package has no dependencies.
+With the [*Atlas* toolkit](http://atlastk.org/), it has never been easier to create your own modern web application ([*SPA*](https://q37.info/s/7sbmxd3j)):
+- no *Javascript* to write; only *HTML* and *Perl*,
+- no [front and back end architecture](https://q37.info/s/px7hhztd) to bother with,
+- no [web server](https://q37.info/s/n3hpwsht) (*Apache*, *Nginx*…) to install,
 
-You can also use the *Atlas* toolkit on [*Repl.it*](http://q37.info/s/mxmgq3qm), an [online IDE](https://q37.info/s/zzkzbdw7), so you have nothing to install. You will find some examples in the next sections. **Important**: you have to ***fork*** this examples before launching them (by clicking the dedicated button or by modifying the source code), or they won't work properly! See <http://q37.info/s/zbgfjtp9> for more details.
--->
+and all this only with the help of a library of about 45 KB.
+
+With the *Atlas* toolkit, your applications will be accessible from the entire internet on laptops, smartphones, tablets…, and this without having to deploy them on a remote server or to open an incoming port on your internet box. All you need is a local computer with a simple internet connection. 
+
+The *Atlas* toolkit is also the fastest and easiest way to add a [graphical user interface](https://q37.info/s/hw9n3pjs) to all your programs.
+
+## Live demonstrations
+
+Before diving into source code, you can have a look on some live demonstrations. Simply go [here](https://q37.info/s/h3h34zgq), click on the green `run` button, select the demonstration you want to see, and then click (or scan with your smartphone) the then displayed [QR code](https://q37.info/s/3pktvrj7).
 
 ## *Hello, World!*
 
-Here's how a [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) type program made with the *Atlas* toolkit looks like:
+Here's how the [*Hello, World!*](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program made with the *Atlas* toolkit looks like:
 
-![Little demonstration](http://q37.info/download/assets/Hello.gif "A basic example")
+![Little demonstration](https://q37.info/download/assets/Hello.gif "A basic example")
 
-- `git clone http://github.com/epeios-q37/atlas-perl`
+This example is part of the live demonstrations above, but you can launch it on your computer:
+
+- `git clone https://github.com/epeios-q37/atlas-perl`
 - `cd atlas-perl`
 - `perl Hello/Hello.py`
-
-<!-- You can also put below source code in a file and launch it after having installed the [*atlastk* package](http://q37.info/s/9srmskcm) (`pip install atlastk`), or, with absolutely no installation, paste the below code [here](http://q37.info/s/srnnb7hj), and open the displayed *URL* in a web browser.
--->
 
 For a live demonstration: <http://q37.info/s/zmzcxvm9> (other live demonstrations: <https://q37.info/s/sssznrb4>).
 
@@ -81,16 +96,6 @@ my %callbacks = (
 Atlas::launch(\%callbacks);
 ```
 
-<!--
-## *TodoMVC*
-
-And here's how the *Atlas* toolkit version of the [*TodoMVC*](http://todomvc.com/) application looks like:
-
-![TodoMVC](http://q37.info/download/TodoMVC.gif "The TodoMVC application made with the Atlas toolkit")
-
-For a live demonstration: <http://q37.info/s/n9nnwzcg>.
--->
-
 ## Content of the repository
 
 The `atlastk` directory contains the *Perl* source code of the *Atlas* toolkit.
@@ -99,14 +104,4 @@ All other directories are examples.
 
 To run an example, launch `perl <Name>/main.pl`, where `<Name>` is the name of the example (`Blank`, `Chatroom`…)
 
-## Miscellaneous
 
-The *Atlas* toolkit is also available for:
-
-- *Java*: <http://github.com/epeios-q37/atlas-java>
-- *Node.js*: <http://github.com/epeios-q37/atlas-node>
-- *PHP*: <http://github.com/epeios-q37/atlas-php>
-- *Python*: <http://github.com/epeios-q37/atlas-python>
-- *Ruby*: <http://github.com/epeios-q37/atlas-ruby>
-
-For more information about the *Atlas* toolkit, go to <http://atlastk.org/>.

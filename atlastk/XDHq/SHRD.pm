@@ -42,7 +42,11 @@ sub isWin {
 }
 
 sub isDev {
-    return defined($ENV{"EPEIOS_SRC"});
+    return defined($ENV{"Q37_EPEIOS"});
+}
+
+sub isREPLit {
+    return ( exists $ENV{"ATK"} ) && ($ENV{"ATK"} eq "REPLit");
 }
 
 sub open {
