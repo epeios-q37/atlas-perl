@@ -5,7 +5,7 @@
 [![Run on Repl.it](https://repl.it/badge/github/epeios-q37/atlas-perl)](https://q37.info/s/h3h34zgq)
 [![Version 0.11](https://img.shields.io/static/v1.svg?&color=90b4ed&label=Version&message=0.11)](http://github.com/epeios-q37/atlas-perl/)
 [![Stars](https://img.shields.io/github/stars/epeios-q37/atlas-perl.svg?style=social)](https://github.com/epeios-q37/atlas-perl/stargazers)
-[![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-perl?color=yellow))](https://github.com/epeios-q37/atlas-perl/blob/master/LICENSE)
+[![license: MIT](https://img.shields.io/github/license/epeios-q37/atlas-perl?color=yellow)](https://github.com/epeios-q37/atlas-perl/blob/master/LICENSE)
 [![Homepage](https://img.shields.io/static/v1?label=homepage&message=atlastk.org&color=ff69b4)](https://atlastk.org)
 
 
