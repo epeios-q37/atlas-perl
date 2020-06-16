@@ -24,11 +24,11 @@ do
     printf "%s: %s\n" "$(chr $((97 + $i )))" "${DEMOS[$i]}"  
   done
 
-  echo -n -e "\nChoose exemple to launch ('a'…'$(chr $((96 + $DEMOS_AMOUNT)))'): "
+  echo -n -e "\nChoose example to launch ('a'…'$(chr $((96 + $DEMOS_AMOUNT)))'): "
 
   read DEMO
 
   export FILE=${DEMOS[$(($(ord $DEMO) - 97))]}
 
-  [ -f $FILE/main.pl ] && CONT=false && perl $FILE/main.pl
+  [ -f examples/$FILE/main.pl ] && cd examples && CONT=false && perl -I ../atlastk $FILE/main.pl
 done
