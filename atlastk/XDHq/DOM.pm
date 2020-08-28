@@ -83,6 +83,10 @@ sub executeStrings {
     return shift->_execute(XDHq::SHRD::RT_STRINGS, shift);
 }
 
+sub flush {
+    shift->{dom}->call("Flush_1", XDHq::SHRD::RT_STRING, shift);
+}
+
 sub alert {
     my ($self, $message) = @_;
 
@@ -104,15 +108,15 @@ sub _handleLayout {
     $self->{dom}->call("HandleLayout_1", XDHq::SHRD::RT_VOID, $variant, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xslFilename);
 }
 
-sub prependLayout {
+sub prependLayout { # Deprecated!
     shift->_handleLayout("Prepend", shift, shift, "");
 }
 
-sub setLayout {
+sub setLayout { # Deprecated!
     shift->_handleLayout("Set", shift, shift, "");
 }
 
-sub appendLayout {
+sub appendLayout { # Deprecated!
     shift->_handleLayout("Append", shift, shift, "");
 }
 
@@ -128,18 +132,50 @@ sub _handleLayoutXSL {
     $self->_handleLayout( $variant, $id, $xml, $xsl);
 }
 
-sub prependLayoutXSL {
+sub prependLayoutXSL { # Deprecated!
     shift->_handleLayoutXSL("Prepend", shift, shift, shift);
 }
 
-sub setLayoutXSL {
+sub setLayoutXSL { # Deprecated!
     shift->_handleLayoutXSL("Set", shift, shift, shift);
 }
 
-sub appendLayoutXSL {
+sub appendLayoutXSL { # Deprecated!
     shift->_handleLayoutXSL("Append", shift, shift, shift);
 }
 
+sub _layout {
+    my ($self, $variant, $id, $xml, $xsl) = @_;
+
+    if ( defined $xsl) {
+        $xsl =~ s/([^-A-Za-z0-9_.!~*'() ])/sprintf("%%%02X", ord($1))/eg;
+        $xsl = "data:text/xml;charset=utf-8," . $xsl;       
+    } else {
+        $xsl = "";
+    }
+
+    $self->{dom}->call("HandleLayout_1", XDHq::SHRD::RT_VOID, $variant, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xsl);
+}
+
+sub before {
+    shift->_layout("beforebegin",shift,shift,shift)
+}
+
+sub begin {
+    shift->_layout("afterbegin",shift,shift,shift)
+}
+
+sub inner {
+    shift->_layout("inner",shift,shift,shift)
+}
+
+sub after {
+    shift->_layout("beforeend",shift,shift,shift)
+}
+
+sub end {
+    shift->_layout("afterend",shift,shift,shift)
+}
 
 sub getContents {
     my ($self, $ids) = @_;
@@ -245,6 +281,30 @@ sub getProperty {
 
 sub focus {
     shift->{dom}->call("Focus_1", XDHq::SHRD::RT_VOID, shift);
+}
+
+sub parent {
+    return shift->{dom}->call("Parent_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub firstChild {
+    return shift->{dom}->call("FirstChild_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub lastChild {
+    return shift->{dom}->call("LastChild_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub previousSibling {
+    return shift->{dom}->call("PreviousSibling_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub nextSibling {
+    return shift->{dom}->call("NextSibling_1", XDHq::SHRD::RT_STRING, shift);
+}
+
+sub scrollTo {
+    shift->{dom}->call("ScrollTo_1", XDHq::SHRD::RT_VOID, shift);
 }
 
 return XDHq::SHRD::TRUE;
