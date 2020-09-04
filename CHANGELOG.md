@@ -5,7 +5,7 @@
 
 ## 2020-08-28
 
-- ALL:
+- *ALL*:
   
    - switching to 0.12,
   
