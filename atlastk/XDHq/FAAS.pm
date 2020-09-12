@@ -162,7 +162,7 @@ sub _ignition {
         if ( XDHq::SHRD::isREPLit() ) {
             system("node", "-e",
             'require("http").createServer(function (req, res){res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"https://atlastk.org/repl_it.php?url=' . $url . '\"></iframe></body></html>");process.exit();}).listen(8080)');
-        } else if (not uc(getEnv("ATK")) eq "NONE"){
+        } elsif (not uc(getEnv("ATK")) eq "NONE") {
             XDHq::SHRD::open($url);
         }
     }
