@@ -23,69 +23,62 @@
 
 ---
 
-## Straight to the point: the ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program
+## A GUI with *Perl* in less then 10 minutes
 
-### Source code
+Click to see how to program this ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) with *Perl* in less then 10 minutes:
+
+[![Building a GUI in with *Perl* in less then 10 minutes](https://q37.info/s/qp4z37pg.gif)](https://q37.info/s/3g7zdnp7)
+
+Same video on [*Peertube*](https://en.wikipedia.org/wiki/PeerTube): <https://q37.info/s/bvvjj7gk>.
+
+Source code:
 
 ```perl
 use Atlas;
 
-my $body = '
+my $BODY = '
 <fieldset>
- <input id="input" maxlength="20" placeholder="Enter a name here" type="text"
-         data-xdh-onevent="Submit" value="World"/>
- <div style="display: flex; justify-content: space-around; margin: 5px auto auto auto;">
-  <button data-xdh-onevent="Submit">Submit</button>
-  <button data-xdh-onevent="Clear">Clear</button>
- </div>
+ <input id="Input" data-xdh-onevent="Submit" value="World"/>
+ <button data-xdh-onevent="Submit">Hello</button>
+ <hr/>
+ <fieldset>
+  <output id="Output">Greetings displayed here!</output>
+ </fieldset>
 </fieldset>
 ';
 
 sub acConnect {
  my ($hello, $dom) = @_;
 
- $dom->inner("",$body);
- $dom->focus("input");
+ $dom->inner("", $BODY);
+ $dom->focus("Input");
 }
 
 sub acSubmit {
  my ($hello, $dom) = @_;
+ my $name = $dom->getValue("Input");
 
- $dom->alert("Hello, " . $dom->getContent("input") . "!");
- $dom->focus("input");
-}
-
-sub acClear {
- my ($hello, $dom) = @_;
-
- if ( $dom->confirm("Are you sure?") ) {
-  $dom->setContent("input", "");
- }
-
- $dom->focus("input");
+ $dom->setValue("Output", "Hello, $name!");
+ $dom->setValue("Input", "");
+ $dom->focus("Input");
 }
 
 my %callbacks = (
  "" => \&acConnect,
- "Submit" => \&acSubmit,
- "Clear" => \&acClear,
+ "Submit" => \&acSubmit
 );
 
 Atlas::launch(\%callbacks);
 ```
 
-### Result
-
-[![Little demonstration](https://q37.info/download/assets/Hello.gif "A basic example")](https://q37.info/s/h3h34zgq)
-
 ### See for yourself right now - it's quick and easy!
 
-#### Online, with nothing to install [![About online demonstrations](https://img.shields.io/badge/about-online%20demonstrations-informational)](https://q37.info/s/sssznrb4)
+#### Online, with nothing to install
 
-Thanks to [*Replit*](https://q37.info/s/mxmgq3qm), an [online IDE](https://q37.info/s/zzkzbdw7), you can write and run programs using the *Atlas* toolkit directly in your web browser, without having to install *Perl* on your computer.
+Thanks to [*Replit*](https://q37.info/s/mxmgq3qm), an [online IDE](https://q37.info/s/zzkzbdw7), you can write and run programs using the *Atlas* toolkit directly in your web browser, without having to install *Perl* on your computer [![About online demonstrations](https://img.shields.io/badge/about-online%20demonstrations-informational)](https://q37.info/s/sssznrb4).
 
 To see some examples, like the following [*TodoMVC*](http://todomvc.com/) application or the above ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) program, simply:
-- go [here](https://q37.info/s/h3h34zgq) (also accessible with the [![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/h3h34zgq) badge at the top of this page),
+- go [here](https://q37.info/s/h3h34zgq) (also accessible with the [![Run on Repl.it](https://q37.info/s/kpm7xhfm.png)](https://q37.info/s/h3h34zgq) button at the top of this page),
 -  click on the green `run` button,
 -  choose the demonstration to launch,
 -  open the then displayed URL in a browser (should be clickable), 
@@ -101,11 +94,13 @@ cd atlas-perl/examples
 perl -I ../atlastk Hello/Hello.pl
 ```
 
+
+
 ## Your turn
 
 If you want to take your code to the next level, from [CLI](https://q37.info/s/cnh9nrw9) to [GUI](https://q37.info/s/hw9n3pjs), then you found the right toolkit.
 
-With the [*Atlas* toolkit](http://atlastk.org/), you transform your programs in modern web applications ([*SPA*](https://q37.info/s/7sbmxd3j)), but without the usual hassles:
+With the [*Atlas* toolkit](http://atlastk.org/), you transform your programs in modern web applications ([*SPA*](https://q37.info/s/7sbmxd3j)) without the usual hassles:
 - no *JavaScript* to write; only *HTML*(/*CSS*) and *Perl*,
 - no [front and back end architecture](https://q37.info/s/px7hhztd) to bother with,
 - no [web server](https://q37.info/s/n3hpwsht) (*Apache*, *Nginx*…) to install,
@@ -114,7 +109,7 @@ With the [*Atlas* toolkit](http://atlastk.org/), you transform your programs in 
 
 The *Atlas* toolkit is written in pure *Perl*, with no native code and no dependencies, allowing the *Atlas* toolkit to be used on all environments where *Perl* is available. 
 
-And, icing on the cake, simply by running them on a local computer with a simple internet connection, applications using the *Atlas* toolkit will be accessible from the entire internet on laptops, smartphones, tablets…
+And simply by running them on a local computer connected to internet, applications using the *Atlas* toolkit will be accessible from the entire internet on laptops, smartphones, tablets…
 
 ## Content of the repository
 
