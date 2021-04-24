@@ -23,9 +23,9 @@
 
 ---
 
-## A GUI with *Perl* in less then 10 minutes
+## A GUI with *Perl* in a couple of minutes
 
-Click to see how to program this ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) with *Perl* in less then 10 minutes:
+Click the animation to see a screencast of programming this ["Hello, World!"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) with *Perl* in a matter of minutes:
 
 [![Building a GUI in with *Perl* in less then 10 minutes](https://q37.info/s/qp4z37pg.gif)](https://q37.info/s/3g7zdnp7)
 
@@ -63,12 +63,12 @@ sub acSubmit {
  $dom->focus("Input");
 }
 
-my %callbacks = (
+my %CALLBACKS = (
  "" => \&acConnect,
  "Submit" => \&acSubmit
 );
 
-Atlas::launch(\%callbacks);
+Atlas::launch(\%CALLBACKS);
 ```
 
 ### See for yourself right now - it's quick and easy!
