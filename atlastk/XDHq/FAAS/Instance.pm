@@ -31,55 +31,39 @@ use XDHq::SHRD;
 use warnings;
 use threads;
 use threads::shared;
+use Thread::Semaphore;
 
 sub new {
+    my $classe  = shift;
 
-    my $lock: shared;
+    $classe = ref($classe) || $classe;
 
-    my %self : shared = (
-        lock => \$lock,
-        handshakeDone => XDHq::SHRD::FALSE
-    );
+    my $this = {};
+    share($this);
 
-    return \%self;
+    bless $this, $classe;
+
+    $this->{id} = shift;
+
+    $this->{readLock} = Thread::Semaphore->new();
+    $this->{readLock}->down();
+
+    return $this;
 }
 
-sub set {
-    my ($self, $thread, $id) = @_;
+sub waitForData {
+    my $this = shift;
 
-#    $self->{thread} = $thread;
-    $self->{id} = $id;
-}
+    $this->{readLock}->down();
 
-sub testAndSetHandshake {
-    my $self = shift;
-
-    if ($self->{handshakeDone}) {
-        return XDHq::SHRD::TRUE;
-    } else {
-        $self->{handshakeDone} = XDHq::SHRD::TRUE;
-        return XDHq::SHRD::FALSE;
+    if ( $this->{quit} ) {
+        XDHq::FAAS::SHRD::instanceDataRead();
+        threads->exit();
     }
 }
 
-sub getId {
-    my $self = shift;
-
-    return $self->{id};
-}
-
-sub wait {
-    my $self = shift;
-
-    lock(${$self->{lock}});
-    cond_wait(${$self->{lock}});
-}
-
-sub signal {
-    my $self = shift;
-
-    lock(${$self->{lock}});
-    cond_signal(${$self->{lock}});
+sub dataAvailable {
+    shift->{readLock}->up();
 }
 
 return XDHq::SHRD::TRUE;
