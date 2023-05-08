@@ -35,6 +35,7 @@ sub acConnect {
     my ($notes, $dom) = @_;
 
     $dom->inner("", Shared::readAsset("Main.html"));
+    $dom->enableElement("XDHFullWidth");
     $notes->displayList($dom);
 }
 
